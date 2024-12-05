@@ -1,11 +1,8 @@
 const express = require('express');
+const webhookRoutes = require('./src/routes/webhook');
 const app = express();
-const port = 3001;
+app.use(express.json()); // Para parsear JSON
+app.use('/api', webhookRoutes);
 
-app.get('/', (req, res) => {
-    res.send('Alteração feita por mim!');
-});
-
-app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`);
-});
+const PORT = 3000;
+app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
