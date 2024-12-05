@@ -1,10 +1,22 @@
-const express = require('express');
-const router = express.Router();
+const fs = require('fs');
+const path = require('path');
 
-router.post('/', (req, res) => {
-    const {orderId, customer, items} = req.body;
-    console.log('Pedido recebido:', {orderId, customer, items});
-    res.sendStatus(200).send({message: 'Pedido recebido com sucesso!'});
-});
+// Caminho do arquivo de log
+const logFilePath = path.join(__dirname, '../logs/webhook.log');
 
-module.exports = router;
+// Função para salvar os logs no arquivo
+const logToFile = (data) => {
+    const timestamp = new Date().toISOString();
+    const logMessage = `[${timestamp}] ${JSON.stringify(data)}\n`;
+
+    // Adiciona o log ao arquivo com tratamento de erros
+    fs.appendFile(logFilePath, logMessage, 'utf8', (err) => {
+        if (err) {
+            console.error('Erro ao escrever no arquivo de log:', err);
+        }
+    });
+};
+
+module.exports = {
+    logToFile,
+};
